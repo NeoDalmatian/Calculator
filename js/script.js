@@ -1,35 +1,26 @@
-function add(a, b) {
-  console.log(a + b);
-}
-
-function subtract (a, b) {
-  console.log(a - b);
-}
-
-function multiply (a, b) {
-  console.log(a * b);
-}
-
-function divide (a, b) {
-  console.log(a / b);
+let operators = {
+  add(a, b) {console.log(a + b);} ,
+  subtract(a, b) {console.log (a - b);},
+  multiply(a, b) {console.log(a * b);},
+  divide(a, b) {console.log(a / b);},
 }
 
 function operate (operator, a, b) {
   switch (operator) {
     case "+":
-      add(a, b);
+      operators.add(a, b);
       break;
 
     case "-":
-      subtract(a, b);
+      operators.subtract(a, b);
       break;
 
     case "*":
-      multiply(a, b);
+      operators.multiply(a, b);
       break;
 
     case "/":
-      divide(a, b);
+      operators.divide(a, b);
       break;
   }
 }
