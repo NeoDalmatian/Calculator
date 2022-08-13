@@ -3,17 +3,28 @@ const operatorButtons = document.querySelectorAll(".blue");
 const display = document.querySelector("#display");
 const equals = document.querySelector("#equals");
 
-let firstNumber= "";
-let secondNumber= "";
-let displayOperator = "";
-let displayResult = "";
+//you can make one object with these two
+
+let calculatorMemory = {
+  firstNumber: "",
+  secondNumber: "",
+  operator: "",
+  result: "",
+}
+
+let computation = {
+  add(a, b) {calculatorMemory.result = parseInt(a) + parseInt(b);},
+  subtract(a, b) {calculatorMemory.result = a - b;},
+  multiply(a, b) {calculatorMemory.result = a * b;},
+  divide(a, b) {calculatorMemory.result = a / b;},
+}
 
 numberButtons.forEach(number => {
   number.addEventListener("click", (e) => {
-    if (displayOperator === "") {
-      firstNumber += e.target.attributes.id.value.toString();
+    if (calculatorMemory.operator === "") {
+      calculatorMemory.firstNumber += e.target.attributes.id.value.toString();
     } else {
-      secondNumber += e.target.attributes.id.value.toString();
+      calculatorMemory.secondNumber += e.target.attributes.id.value.toString();
     }
     //populateDisplay();
   });
@@ -21,45 +32,40 @@ numberButtons.forEach(number => {
 
 operatorButtons.forEach(operatorButton => {
   operatorButton.addEventListener("click", (e) => {
-    displayOperator = e.target.attributes.id.value;
+    calculatorMemory.operator = e.target.attributes.id.value;
   });
 });
 
 equals.addEventListener("click", () => {
   operate();
-  console.log(displayResult);
+  console.log(calculatorMemory.result);
 });
 
 function populateDisplay() {
   const displayElements = document.createElement("div");
-  displayElements.innerText = `${firstNumber}`;
+  displayElements.innerText = `${calculatorMemory.firstNumber}`;
   display.firstChild.remove();
   display.appendChild(displayElements);
 }
 
-let operators = {
-  add(a, b) {displayResult = parseInt(a) + parseInt(b);},
-  subtract(a, b) {displayResult = a - b;},
-  multiply(a, b) {displayResult = a * b;},
-  divide(a, b) {displayResult = a / b;},
-}
-
-function operate (operator = displayOperator, a = firstNumber, b = secondNumber) {
+function operate (operator = calculatorMemory.operator,
+                         a = calculatorMemory.firstNumber,
+                         b = calculatorMemory.secondNumber) {
   switch (operator) {
     case "+":
-      operators.add(a, b);
+      computation.add(a, b);
       break;
 
     case "-":
-      operators.subtract(a, b);
+      computation.subtract(a, b);
       break;
 
     case "*":
-      operators.multiply(a, b);
+      computation.multiply(a, b);
       break;
 
     case "/":
-      operators.divide(a, b);
+      computation.divide(a, b);
       break;
   }
 }
