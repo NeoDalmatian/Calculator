@@ -3,12 +3,11 @@ const operatorButtons = document.querySelectorAll(".blue");
 const display = document.querySelector("#display");
 const equals = document.querySelector("#equals");
 const reset = document.querySelector("#AC");
-
-//maybe firstNumber/secondNumber can be arrays ? so when we delete we can just pop them out
+const back = document.querySelector("#back");
 
 let computation = {
-  firstNumber: "",
-  secondNumber: "",
+  firstNumber: [],
+  secondNumber: [],
   operator: "",
   result: "",
   add(a, b) {this.result = parseInt(a) + parseInt(b);},
@@ -20,11 +19,10 @@ let computation = {
 numberButtons.forEach(number => {
   number.addEventListener("click", (e) => {
     if (computation.operator === "") {
-      computation.firstNumber += e.target.attributes.id.value.toString();
+      computation.firstNumber.push(e.target.attributes.id.value.toString());
     } else {
-      computation.secondNumber += e.target.attributes.id.value.toString();
+      computation.secondNumber.push(e.target.attributes.id.value.toString());
     }
-    //populateDisplay();
   });
 });
 
@@ -37,16 +35,28 @@ operatorButtons.forEach(operatorButton => {
 equals.addEventListener("click", () => {
   operate();
   isNaN(computation.result) ? console.log("ERROR") : console.log(computation.result);
-  computation.firstNumber = "";
-  computation.secondNumber = "";
+  computation.firstNumber = [];
+  computation.secondNumber = [];
   computation.operator = "";
 });
 
 reset.addEventListener("click", () => {
-  computation.firstNumber = "";
-  computation.secondNumber = "";
+  computation.firstNumber = [];
+  computation.secondNumber = [];
   computation.operator = "";
   computation.result = "";
+})
+
+back.addEventListener("click", () => {
+  if (computation.firstNumber.length !== 0 && computation.operator !== "" && 
+      computation.secondNumber.length !== 0) {
+    computation.secondNumber.pop();
+  } else if (computation.firstNumber.length !== 0 && computation.operator !== "" && 
+             computation.secondNumber.length === 0) {
+    computation.operator = "";
+  } else {
+    computation.firstNumber.pop();
+  }
 })
 
 function populateDisplay() {
@@ -57,8 +67,8 @@ function populateDisplay() {
 }
 
 function operate (operator = computation.operator,
-                         a = computation.firstNumber,
-                         b = computation.secondNumber) {
+                         a = computation.firstNumber.join(""),
+                         b = computation.secondNumber.join("")) {
   switch (operator) {
     case "+":
       computation.add(a, b);
