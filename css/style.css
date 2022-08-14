@@ -9,8 +9,8 @@ body {
 #calculator {
   background: gray;
   width: 400px;
-  height: 450px;
-  margin: 30px;
+  height: 500px;
+  margin: 15px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,12 +21,12 @@ body {
 #display {
   background: white;
   width: 330px;
-  height: 70px;
+  height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  font-size: 30px;
+  font-size: 40px;
 }
 
 .buttons {
@@ -67,4 +67,8 @@ button {
 
 #back {
   font-size: 40px;
+}
+
+#firstLine {
+  display: flex;
 }

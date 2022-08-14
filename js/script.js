@@ -1,9 +1,22 @@
+//BUG Can't add first negative number
+
 const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".blue");
-const display = document.querySelector("#display");
 const equals = document.querySelector("#equals");
 const reset = document.querySelector("#AC");
 const back = document.querySelector("#back");
+const displayFirstLine = document.querySelector("#firstLine")
+const displaySecondLine = document.querySelector("#secondLine")
+
+const firstLine = document.createElement("div");
+const secondLine = document.createElement("div");
+const thirdLine = document.createElement("div");
+const fourthLine = document.createElement("div");
+
+displayFirstLine.appendChild(firstLine);
+displayFirstLine.appendChild(secondLine);
+displayFirstLine.appendChild(thirdLine);
+displaySecondLine.appendChild(fourthLine);
 
 let computation = {
   firstNumber: [],
@@ -20,51 +33,54 @@ numberButtons.forEach(number => {
   number.addEventListener("click", (e) => {
     if (computation.operator === "") {
       computation.firstNumber.push(e.target.attributes.id.value.toString());
+      firstLine.innerText = computation.firstNumber.join("");
     } else {
       computation.secondNumber.push(e.target.attributes.id.value.toString());
+      thirdLine.innerText = computation.secondNumber.join("");
     }
   });
 });
 
 operatorButtons.forEach(operatorButton => {
   operatorButton.addEventListener("click", (e) => {
-    computation.operator = e.target.attributes.id.value;
+    if (computation.result !== "") {
+      computation.firstNumber = Array.from(String(computation.result), String)
+      computation.operator = e.target.attributes.id.value;
+      resetDisplayNumbers();
+      firstLine.innerText = computation.firstNumber.join("");
+      secondLine.innerText = computation.operator;
+      thirdLine.innerText = computation.secondNumber.join("");
+    }
+    operatorOptions(e);
   });
 });
 
 equals.addEventListener("click", () => {
   operate();
-  isNaN(computation.result) ? console.log("ERROR") : console.log(computation.result);
+  isNaN(computation.result) ? resultError() : resultNormal();
   computation.firstNumber = [];
   computation.secondNumber = [];
   computation.operator = "";
 });
 
-reset.addEventListener("click", () => {
-  computation.firstNumber = [];
-  computation.secondNumber = [];
-  computation.operator = "";
-  computation.result = "";
-})
+reset.addEventListener("click", () => resetDisplay())
 
 back.addEventListener("click", () => {
-  if (computation.firstNumber.length !== 0 && computation.operator !== "" && 
-      computation.secondNumber.length !== 0) {
+  if (computation.result !== "") {
+    resetDisplay();
+  } else if (computation.firstNumber.length !== 0 && computation.operator !== "" &&
+             computation.secondNumber.length !== 0) {
     computation.secondNumber.pop();
-  } else if (computation.firstNumber.length !== 0 && computation.operator !== "" && 
+    thirdLine.innerText = computation.secondNumber.join("");
+  } else if (computation.firstNumber.length !== 0 && computation.operator !== "" &&
              computation.secondNumber.length === 0) {
     computation.operator = "";
+    secondLine.innerText = "";
   } else {
     computation.firstNumber.pop();
+    firstLine.innerText = computation.firstNumber.join("");
   }
-})
-
-function populateDisplay() {
-  const displayElements = document.createElement("div");
-  displayElements.innerText = `${computation.firstNumber}`;
-  display.firstChild.remove();
-  display.appendChild(displayElements);
-}
+});
 
 function operate (operator = computation.operator,
                          a = computation.firstNumber.join(""),
@@ -86,4 +102,42 @@ function operate (operator = computation.operator,
       computation.divide(a, b);
       break;
   }
+}
+
+function resetDisplay () {
+  computation.firstNumber = [];
+  computation.secondNumber = [];
+  computation.operator = "";
+  computation.result = "";
+  firstLine.innerText = "";
+  secondLine.innerText = "";
+  thirdLine.innerText = "";
+  fourthLine.innerText = "";
+}
+
+function resetDisplayNumbers () {
+  firstLine.innerText = "";
+  secondLine.innerText = "";
+  thirdLine.innerText = "";
+  fourthLine.innerText = "";
+}
+//I'll probably need do tinker here for sign - (first negative number)
+function operatorOptions (e) {
+  if (computation.firstNumber.length !== 0)
+  computation.operator = e.target.attributes.id.value;
+  if (computation.operator === "*") {
+    secondLine.innerText = "x";
+  } else if (computation.operator === "/") {
+    secondLine.innerText = "÷";
+  } else {
+    secondLine.innerText = computation.operator;
+  }
+}
+
+function resultError () {
+  fourthLine.innerText = "ERROR!";
+}
+
+function resultNormal () {
+  fourthLine.innerText = computation.result;
 }
