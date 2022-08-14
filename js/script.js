@@ -1,4 +1,4 @@
-//BUG Can't add first negative number
+//Implement ability to only add one .
 
 const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".blue");
@@ -32,10 +32,10 @@ let computation = {
 numberButtons.forEach(number => {
   number.addEventListener("click", (e) => {
     if (computation.operator === "") {
-      computation.firstNumber.push(e.target.attributes.id.value.toString());
+      computation.firstNumber.push(e.target.attributes.id.value);
       firstLine.innerText = computation.firstNumber.join("");
     } else {
-      computation.secondNumber.push(e.target.attributes.id.value.toString());
+      computation.secondNumber.push(e.target.attributes.id.value);
       thirdLine.innerText = computation.secondNumber.join("");
     }
   });
@@ -50,6 +50,7 @@ operatorButtons.forEach(operatorButton => {
       firstLine.innerText = computation.firstNumber.join("");
       secondLine.innerText = computation.operator;
       thirdLine.innerText = computation.secondNumber.join("");
+      computation.result = "";
     }
     operatorOptions(e);
   });
@@ -103,7 +104,7 @@ function operate (operator = computation.operator,
       break;
   }
 }
-
+//delete unnecessary
 function resetDisplay () {
   computation.firstNumber = [];
   computation.secondNumber = [];
@@ -121,10 +122,14 @@ function resetDisplayNumbers () {
   thirdLine.innerText = "";
   fourthLine.innerText = "";
 }
-//I'll probably need do tinker here for sign - (first negative number)
+//Two functions!
 function operatorOptions (e) {
-  if (computation.firstNumber.length !== 0)
-  computation.operator = e.target.attributes.id.value;
+  if (computation.firstNumber.length === 0 && e.target.attributes.id.value === "-") {
+    computation.firstNumber.push("-");
+    firstLine.innerText = "-";
+  } else if (computation.firstNumber.length !== 0) {
+    computation.operator = e.target.attributes.id.value;
+  }
   if (computation.operator === "*") {
     secondLine.innerText = "x";
   } else if (computation.operator === "/") {
