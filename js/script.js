@@ -5,8 +5,9 @@ const operatorButtons = document.querySelectorAll(".blue");
 const equals = document.querySelector("#equals");
 const reset = document.querySelector("#AC");
 const back = document.querySelector("#back");
-const displayFirstLine = document.querySelector("#firstLine")
-const displaySecondLine = document.querySelector("#secondLine")
+const dot = document.querySelector("#dot");
+const displayFirstLine = document.querySelector("#firstLine");
+const displaySecondLine = document.querySelector("#secondLine");
 
 const firstLine = document.createElement("div");
 const secondLine = document.createElement("div");
@@ -29,15 +30,19 @@ let computation = {
   divide(a, b) {this.result = a / b;},
 }
 
+dot.addEventListener("click", () => {
+  // you will prob need scour arrays for matching . in if statement and then
+  // run same script as for numberButtons
+})
+
 numberButtons.forEach(number => {
   number.addEventListener("click", (e) => {
-    if (computation.operator === "") {
-      computation.firstNumber.push(e.target.attributes.id.value);
-      firstLine.innerText = computation.firstNumber.join("");
+    if (computation.result !== "") {
+          resetDisplay();
+          numberOptions(e);
     } else {
-      computation.secondNumber.push(e.target.attributes.id.value);
-      thirdLine.innerText = computation.secondNumber.join("");
-    }
+      numberOptions(e);
+    };
   });
 });
 
@@ -136,6 +141,16 @@ function operatorOptions (e) {
     secondLine.innerText = "÷";
   } else {
     secondLine.innerText = computation.operator;
+  }
+}
+
+function numberOptions (e) {
+  if (computation.operator === "") {
+    computation.firstNumber.push(e.target.attributes.id.value);
+    firstLine.innerText = computation.firstNumber.join("");
+  } else {
+    computation.secondNumber.push(e.target.attributes.id.value);
+    thirdLine.innerText = computation.secondNumber.join("");
   }
 }
 
