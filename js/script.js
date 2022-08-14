@@ -2,29 +2,27 @@ const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".blue");
 const display = document.querySelector("#display");
 const equals = document.querySelector("#equals");
+const reset = document.querySelector("#AC");
 
-//you can make one object with these two
+//maybe firstNumber/secondNumber can be arrays ? so when we delete we can just pop them out
 
-let calculatorMemory = {
+let computation = {
   firstNumber: "",
   secondNumber: "",
   operator: "",
   result: "",
-}
-
-let computation = {
-  add(a, b) {calculatorMemory.result = parseInt(a) + parseInt(b);},
-  subtract(a, b) {calculatorMemory.result = a - b;},
-  multiply(a, b) {calculatorMemory.result = a * b;},
-  divide(a, b) {calculatorMemory.result = a / b;},
+  add(a, b) {this.result = parseInt(a) + parseInt(b);},
+  subtract(a, b) {this.result = a - b;},
+  multiply(a, b) {this.result = a * b;},
+  divide(a, b) {this.result = a / b;},
 }
 
 numberButtons.forEach(number => {
   number.addEventListener("click", (e) => {
-    if (calculatorMemory.operator === "") {
-      calculatorMemory.firstNumber += e.target.attributes.id.value.toString();
+    if (computation.operator === "") {
+      computation.firstNumber += e.target.attributes.id.value.toString();
     } else {
-      calculatorMemory.secondNumber += e.target.attributes.id.value.toString();
+      computation.secondNumber += e.target.attributes.id.value.toString();
     }
     //populateDisplay();
   });
@@ -32,25 +30,35 @@ numberButtons.forEach(number => {
 
 operatorButtons.forEach(operatorButton => {
   operatorButton.addEventListener("click", (e) => {
-    calculatorMemory.operator = e.target.attributes.id.value;
+    computation.operator = e.target.attributes.id.value;
   });
 });
 
 equals.addEventListener("click", () => {
   operate();
-  console.log(calculatorMemory.result);
+  isNaN(computation.result) ? console.log("ERROR") : console.log(computation.result);
+  computation.firstNumber = "";
+  computation.secondNumber = "";
+  computation.operator = "";
 });
+
+reset.addEventListener("click", () => {
+  computation.firstNumber = "";
+  computation.secondNumber = "";
+  computation.operator = "";
+  computation.result = "";
+})
 
 function populateDisplay() {
   const displayElements = document.createElement("div");
-  displayElements.innerText = `${calculatorMemory.firstNumber}`;
+  displayElements.innerText = `${computation.firstNumber}`;
   display.firstChild.remove();
   display.appendChild(displayElements);
 }
 
-function operate (operator = calculatorMemory.operator,
-                         a = calculatorMemory.firstNumber,
-                         b = calculatorMemory.secondNumber) {
+function operate (operator = computation.operator,
+                         a = computation.firstNumber,
+                         b = computation.secondNumber) {
   switch (operator) {
     case "+":
       computation.add(a, b);
