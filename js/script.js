@@ -2,9 +2,6 @@
 //After pushing second operator button it should calculate-
 //result of before and put chosen operator with result.
 //round result numbers to two decimals prob with Math().
-//Pressing = before entering all of the numbers will cause problems.
-//BUG! When *adding* it ignores numbers after decimal (it kick them out)-
-//possible solution: in computation function add parseInt().
 
 const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".blue");
@@ -32,7 +29,7 @@ let computation = {
   secondNumber: [],
   operator: "",
   result: "",
-  add(a, b) {this.result = parseInt(a) + parseInt(b);},
+  add(a, b) {this.result = parseFloat(a) + parseFloat(b);},
   subtract(a, b) {this.result = a - b;},
   multiply(a, b) {this.result = a * b;},
   divide(a, b) {this.result = a / b;}
@@ -69,11 +66,7 @@ operatorButtons.forEach(operatorButton => {
 });
 
 equals.addEventListener("click", () => {
-  operate();
-  isNaN(computation.result) ? resultError() : resultNormal();
-  computation.firstNumber = [];
-  computation.secondNumber = [];
-  computation.operator = "";
+  equalsOptions();
 });
 
 reset.addEventListener("click", () => resetDisplay())
@@ -168,6 +161,18 @@ function numberOptions (e) {
   } else {
     computation.secondNumber.push(e.target.attributes.id.value);
     thirdLine.innerText = computation.secondNumber.join("");
+  }
+}
+
+function equalsOptions () {
+  if (computation.firstNumber.length !== 0 && computation.secondNumber.length !== 0 && computation.operator !== "") {
+    operate();
+    isNaN(computation.result) ? resultError() : resultNormal();
+    computation.firstNumber = [];
+    computation.secondNumber = [];
+    computation.operator = "";
+  } else {
+    return;
   }
 }
 
