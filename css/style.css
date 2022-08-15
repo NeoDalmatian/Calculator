@@ -21,8 +21,9 @@ body {
 #display {
   background: white;
   width: 330px;
-  height: 120px;
+  min-height: 100px;
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
@@ -69,6 +70,7 @@ button {
   font-size: 40px;
 }
 
-#firstLine {
+#displayFirstLine {
   display: flex;
+  flex-wrap: wrap;
 }

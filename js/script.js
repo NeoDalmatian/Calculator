@@ -1,7 +1,6 @@
-//I can solve too many number problem in input with flex: wrap; in CSS.
+//I can solve too many number problem in input with flex: wrap; in CSS.S
 //After pushing second operator button it should calculate-
 //result of before and put chosen operator with result.
-//round result numbers to two decimals prob with Math().
 
 const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".blue");
@@ -9,20 +8,12 @@ const equals = document.querySelector("#equals");
 const reset = document.querySelector("#AC");
 const back = document.querySelector("#back");
 const dot = document.querySelector("#dot");
-const displayFirstLine = document.querySelector("#firstLine");
-const displaySecondLine = document.querySelector("#secondLine");
-
-//I could probably do this in html and just query them here.
-
-const firstLine = document.createElement("div");
-const secondLine = document.createElement("div");
-const thirdLine = document.createElement("div");
-const fourthLine = document.createElement("div");
-
-displayFirstLine.appendChild(firstLine);
-displayFirstLine.appendChild(secondLine);
-displayFirstLine.appendChild(thirdLine);
-displaySecondLine.appendChild(fourthLine);
+const displayFirstLine = document.querySelector("#displayFirstLine");
+const displaySecondLine = document.querySelector("#displaySecondLine");
+const firstLine = document.querySelector("#firstLine");
+const secondLine = document.querySelector("#secondLine");
+const thirdLine = document.querySelector("#thirdLine");
+const fourthLine = document.querySelector("#fourthLine");
 
 let computation = {
   firstNumber: [],
@@ -42,6 +33,7 @@ dot.addEventListener("click", () => {
 numberButtons.forEach(number => {
   number.addEventListener("click", (e) => {
     if (computation.result !== "") {
+          resetComputation();
           resetDisplay();
           numberOptions(e);
     } else {
@@ -55,7 +47,7 @@ operatorButtons.forEach(operatorButton => {
     if (computation.result !== "") {
       computation.firstNumber = Array.from(String(computation.result), String)
       computation.operator = e.target.attributes.id.value;
-      resetDisplayNumbers();
+      resetDisplay();
       firstLine.innerText = computation.firstNumber.join("");
       secondLine.innerText = computation.operator;
       thirdLine.innerText = computation.secondNumber.join("");
@@ -69,10 +61,14 @@ equals.addEventListener("click", () => {
   equalsOptions();
 });
 
-reset.addEventListener("click", () => resetDisplay())
+reset.addEventListener("click", () =>  {
+  resetComputation();
+  resetDisplay();
+})
 
 back.addEventListener("click", () => {
   if (computation.result !== "") {
+    resetComputation();
     resetDisplay();
   } else if (computation.firstNumber.length !== 0 && computation.operator !== "" &&
              computation.secondNumber.length !== 0) {
@@ -109,25 +105,21 @@ function operate (operator = computation.operator,
       break;
   }
 }
-//delete unnecessary.
-function resetDisplay () {
+
+function resetComputation () {
   computation.firstNumber = [];
   computation.secondNumber = [];
   computation.operator = "";
   computation.result = "";
+}
+
+function resetDisplay () {
   firstLine.innerText = "";
   secondLine.innerText = "";
   thirdLine.innerText = "";
   fourthLine.innerText = "";
 }
 
-function resetDisplayNumbers () {
-  firstLine.innerText = "";
-  secondLine.innerText = "";
-  thirdLine.innerText = "";
-  fourthLine.innerText = "";
-}
-//Two functions!
 function operatorOptions (e) {
   if (computation.firstNumber.length === 0 && e.target.attributes.id.value === "-") {
     computation.firstNumber.push("-");
@@ -135,6 +127,10 @@ function operatorOptions (e) {
   } else if (computation.firstNumber.length !== 0) {
     computation.operator = e.target.attributes.id.value;
   }
+  operatorOptionsFont();
+}
+
+function operatorOptionsFont () {
   if (computation.operator === "*") {
     secondLine.innerText = "x";
   } else if (computation.operator === "/") {
@@ -165,7 +161,8 @@ function numberOptions (e) {
 }
 
 function equalsOptions () {
-  if (computation.firstNumber.length !== 0 && computation.secondNumber.length !== 0 && computation.operator !== "") {
+  if (computation.firstNumber.length !== 0 && computation.secondNumber.length !== 0 && 
+      computation.operator !== "") {
     operate();
     isNaN(computation.result) ? resultError() : resultNormal();
     computation.firstNumber = [];
