@@ -1,4 +1,10 @@
-//Implement ability to only add one .
+//I can solve too many number problem in input with flex: wrap; in CSS.
+//After pushing second operator button it should calculate-
+//result of before and put chosen operator with result.
+//round result numbers to two decimals prob with Math().
+//Pressing = before entering all of the numbers will cause problems.
+//BUG! When *adding* it ignores numbers after decimal (it kick them out)-
+//possible solution: in computation function add parseInt().
 
 const numberButtons = document.querySelectorAll(".numbers");
 const operatorButtons = document.querySelectorAll(".blue");
@@ -8,6 +14,8 @@ const back = document.querySelector("#back");
 const dot = document.querySelector("#dot");
 const displayFirstLine = document.querySelector("#firstLine");
 const displaySecondLine = document.querySelector("#secondLine");
+
+//I could probably do this in html and just query them here.
 
 const firstLine = document.createElement("div");
 const secondLine = document.createElement("div");
@@ -27,12 +35,11 @@ let computation = {
   add(a, b) {this.result = parseInt(a) + parseInt(b);},
   subtract(a, b) {this.result = a - b;},
   multiply(a, b) {this.result = a * b;},
-  divide(a, b) {this.result = a / b;},
+  divide(a, b) {this.result = a / b;}
 }
 
 dot.addEventListener("click", () => {
-  // you will prob need scour arrays for matching . in if statement and then
-  // run same script as for numberButtons
+    dotOptions();
 })
 
 numberButtons.forEach(number => {
@@ -109,7 +116,7 @@ function operate (operator = computation.operator,
       break;
   }
 }
-//delete unnecessary
+//delete unnecessary.
 function resetDisplay () {
   computation.firstNumber = [];
   computation.secondNumber = [];
@@ -142,6 +149,16 @@ function operatorOptions (e) {
   } else {
     secondLine.innerText = computation.operator;
   }
+}
+
+function dotOptions() {
+  if (computation.operator === "" && !computation.firstNumber.includes(".")) {
+    computation.firstNumber.push(".");
+    firstLine.innerText += ".";
+  } else if (computation.operator !== "" && !computation.secondNumber.includes(".")){
+    computation.secondNumber.push(".");
+    thirdLine.innerText += ".";
+  };
 }
 
 function numberOptions (e) {
