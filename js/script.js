@@ -181,5 +181,5 @@ function resultError () {
 }
 
 function resultNormal () {
-  fourthLine.innerText = computation.result;
+  fourthLine.innerText = Math.round((computation.result) * 100) / 100;
 }
