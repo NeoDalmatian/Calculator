@@ -1,4 +1,4 @@
-//I can solve too many number problem in input with flex: wrap; in CSS.S
+//I can solve too many number problem in input with flex: wrap; in CSS.
 //After pushing second operator button it should calculate-
 //result of before and put chosen operator with result.
 
@@ -8,8 +8,7 @@ const equals = document.querySelector("#equals");
 const reset = document.querySelector("#AC");
 const back = document.querySelector("#back");
 const dot = document.querySelector("#dot");
-const displayFirstLine = document.querySelector("#displayFirstLine");
-const displaySecondLine = document.querySelector("#displaySecondLine");
+
 const firstLine = document.querySelector("#firstLine");
 const secondLine = document.querySelector("#secondLine");
 const thirdLine = document.querySelector("#thirdLine");
@@ -33,15 +32,15 @@ dot.addEventListener("click", () => {
 numberButtons.forEach(number => {
   number.addEventListener("click", (e) => {
     if (computation.result !== "") {
-          resetComputation();
-          resetDisplay();
-          numberOptions(e);
+      resetComputation();
+      resetDisplay();
+      numberOptions(e);
     } else {
       numberOptions(e);
     };
   });
 });
-
+// BUG with ERROR! (can operate resulting in NaN) put if statement (if(result = ERROR!)...)
 operatorButtons.forEach(operatorButton => {
   operatorButton.addEventListener("click", (e) => {
     if (computation.result !== "") {
@@ -84,9 +83,8 @@ back.addEventListener("click", () => {
   }
 });
 
-function operate (operator = computation.operator,
-                         a = computation.firstNumber.join(""),
-                         b = computation.secondNumber.join("")) {
+function operate (operator = computation.operator, a = computation.firstNumber.join(""),
+                  b = computation.secondNumber.join("")) {
   switch (operator) {
     case "+":
       computation.add(a, b);
@@ -178,5 +176,6 @@ function resultError () {
 }
 
 function resultNormal () {
-  fourthLine.innerText = Math.round((computation.result) * 100) / 100;
+  computation.result = Math.round((computation.result) * 100) / 100;
+  fourthLine.innerText =computation.result;
 }
